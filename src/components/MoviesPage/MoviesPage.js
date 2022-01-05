@@ -1,11 +1,26 @@
 import { useState, useEffect } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch, useHistory, useLocation } from "react-router-dom";
 import * as API from "../../services/movies-api";
 
 const MoviesPage = () => {
+  const history = useHistory();
+  const location = useLocation();
+
   const { url } = useRouteMatch();
+  const queryParams = new URLSearchParams(location.search).get("query");
+
   const [searchQuery, setSearchQuery] = useState("");
   const [searchingMovies, setSearchingMovies] = useState(null);
+
+  useEffect(() => {
+    if (queryParams === null) {
+      return;
+    }
+
+    API.fetchMoviesByKeyword(queryParams).then((response) =>
+      setSearchingMovies(response.results)
+    );
+  }, [queryParams]);
 
   const handleChange = (e) => {
     const { value } = e.currentTarget;
@@ -18,12 +33,11 @@ const MoviesPage = () => {
       return;
     }
     setSearchQuery(searchQuery);
-    API.fetchMoviesByKeyword(searchQuery).then((response) =>
-      setSearchingMovies(response.results)
-    );
+
+    history.push({ ...location, search: `query=${searchQuery}` });
     setSearchQuery("");
   };
-  console.log(searchingMovies);
+
   return (
     <>
       <form onSubmit={handleSubmit}>

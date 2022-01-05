@@ -5,7 +5,7 @@ import * as API from "../../services/movies-api";
 const Reviews = ({ movieId }) => {
   const { url, path } = useRouteMatch();
   const [reviews, setReviews] = useState(null);
-  console.log(useRouteMatch());
+
   useEffect(() => {
     API.fetchMovieReviews(movieId).then((response) =>
       setReviews(response.results)
@@ -13,10 +13,6 @@ const Reviews = ({ movieId }) => {
   }, [movieId]);
   return (
     <>
-      <Link to={`${url}/reviews`}>
-        {" "}
-        <h2>Reviews</h2>{" "}
-      </Link>
       <Route path={`${path}/reviews`}>
         {reviews && (
           <ul>
