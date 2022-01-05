@@ -1,0 +1,7 @@
+.moviesList {
+  margin-top: 20px;
+}
+
+.listItem:not(:last-child) {
+  margin-bottom: 5px;
+}

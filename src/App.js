@@ -1,22 +1,22 @@
 import { lazy, Suspense } from "react";
 import { Switch, Route } from "react-router-dom";
+import Container from "./components/Container";
 import Navigation from "./components/Navigation";
 import NotFound from "./components/NotFound";
 
 const HomePage = lazy(() =>
-  import("./components/HomePage" /* webpackChunkName: 'home-page' */)
+  import("./pages/HomePage" /* webpackChunkName: 'home-page' */)
 );
 const MoviesPage = lazy(() =>
-  import("./components/MoviesPage" /* webpackChunkName: 'movies-page' */)
+  import("./pages/MoviesPage" /* webpackChunkName: 'movies-page' */)
 );
 const MovieDetailsPage = lazy(() =>
-  import("./components/MovieDetailsPage" /* webpackChunkName: 'details-page' */)
+  import("./pages/MovieDetailsPage" /* webpackChunkName: 'details-page' */)
 );
-// import "./App.css";
 
 function App() {
   return (
-    <div className="App">
+    <Container>
       <Navigation />
       <Suspense fallback={<p>Loading...</p>}>
         <Switch>
@@ -35,7 +35,7 @@ function App() {
           </Route>
         </Switch>
       </Suspense>
-    </div>
+    </Container>
   );
 }
 

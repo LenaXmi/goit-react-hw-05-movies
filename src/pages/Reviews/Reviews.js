@@ -1,25 +1,25 @@
 import { useState, useEffect } from "react";
-import { useRouteMatch, Link, Route } from "react-router-dom";
+import { useRouteMatch, Route } from "react-router-dom";
 import * as API from "../../services/movies-api";
 
 const Reviews = ({ movieId }) => {
-  const { url, path } = useRouteMatch();
+  const { path } = useRouteMatch();
   const [reviews, setReviews] = useState(null);
 
   useEffect(() => {
-    API.fetchMovieReviews(movieId).then((response) =>
-      setReviews(response.results)
-    );
+    API.fetchMovieReviews(movieId)
+      .then((response) => setReviews(response.results))
+      .catch((error) => console.log(error));
   }, [movieId]);
   return (
     <>
       <Route path={`${path}/reviews`}>
         {reviews && (
           <ul>
-            {reviews.map((review) => (
-              <li key={review.id}>
-                <h3>{review.author}</h3>
-                <p>{review.content}</p>
+            {reviews.map(({ id, author, content }) => (
+              <li key={id}>
+                <h3>{author}</h3>
+                <p>{content}</p>
               </li>
             ))}
           </ul>

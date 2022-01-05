@@ -1,25 +1,25 @@
 import { useState, useEffect } from "react";
 import { Link, useRouteMatch, useHistory, useLocation } from "react-router-dom";
 import * as API from "../../services/movies-api";
+import s from "./MoviesPage.module.css";
 
 const MoviesPage = () => {
   const history = useHistory();
   const location = useLocation();
-
   const { url } = useRouteMatch();
   const queryParams = new URLSearchParams(location.search).get("query");
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchingMovies, setSearchingMovies] = useState(null);
+  const [searchingMovies, setSearchingMovies] = useState([]);
 
   useEffect(() => {
     if (queryParams === null) {
       return;
     }
 
-    API.fetchMoviesByKeyword(queryParams).then((response) =>
-      setSearchingMovies(response.results)
-    );
+    API.fetchMoviesByKeyword(queryParams)
+      .then((response) => setSearchingMovies(response.results))
+      .catch((error) => console.log(error));
   }, [queryParams]);
 
   const handleChange = (e) => {
@@ -49,13 +49,13 @@ const MoviesPage = () => {
           value={searchQuery}
           onChange={handleChange}
         />
-        <button type="submit">find</button>
+        <button type="submit">Search</button>
       </form>
       {searchingMovies && (
-        <ul>
-          {searchingMovies.map((movie) => (
-            <li key={movie.id}>
-              <Link to={`${url}/${movie.id}`}>{movie.original_title}</Link>
+        <ul className={s.moviesList}>
+          {searchingMovies.map(({ id, original_title }) => (
+            <li key={id} className={s.listItem}>
+              <Link to={`${url}/${id}`}>{original_title}</Link>
             </li>
           ))}
         </ul>

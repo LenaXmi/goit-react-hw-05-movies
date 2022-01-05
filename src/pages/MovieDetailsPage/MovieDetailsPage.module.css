@@ -1,0 +1,23 @@
+.poster {
+  width: 400px;
+  height: 600px;
+  margin-right: 30px;
+}
+
+.movieContainer {
+  display: flex;
+  padding: 12px;
+}
+
+.genresList {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.genreItem:not(:last-child) {
+  margin-right: 10px;
+}
+
+.castLink {
+  margin-right: 15px;
+}
