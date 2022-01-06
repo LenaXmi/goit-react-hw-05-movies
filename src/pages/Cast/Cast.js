@@ -1,5 +1,6 @@
 import { useRouteMatch, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Loader from "react-loader-spinner";
 import * as API from "../../services/movies-api";
 import s from "./Cast.module.css";
 import icon from "../../icons/icon.png";
@@ -7,35 +8,52 @@ import icon from "../../icons/icon.png";
 const Cast = ({ movieId }) => {
   const { path } = useRouteMatch();
 
-  const [cast, setCast] = useState(null);
+  const [cast, setCast] = useState([]);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    API.fetchMovieCredits(movieId)
-      .then((response) => setCast(response.cast))
-      .catch((error) => console.log(error));
+    if (movieId) {
+      setStatus("pending");
+      API.fetchMovieCredits(movieId)
+        .then((response) => setCast(response.cast), setStatus("resolved"))
+        .catch((error) => setError(error));
+    }
   }, [movieId]);
 
   return (
     <>
       <Route path={`${path}/cast`}>
-        {cast && (
+        {status === "pending" && (
+          <Loader
+            type="Circles"
+            color="#2196f3"
+            height={70}
+            width={70}
+            timeout={2000}
+          />
+        )}
+        {status === "resolved" && cast && (
           <ul>
-            {cast.map((actor) => (
-              <li key={actor.id}>
+            {cast.map(({ id, profile_path, name, character }) => (
+              <li key={id}>
                 <img
                   className={s.actorPhoto}
                   src={
-                    actor.profile_path
-                      ? `https://image.tmdb.org/t/p/w342${actor.profile_path}`
+                    profile_path
+                      ? `https://image.tmdb.org/t/p/w342${profile_path}`
                       : icon
                   }
                   alt="actor"
                 />
-                <p> {actor.name}</p>
-                <p>Character: {actor.character}</p>
+                <p> {name}</p>
+                <p>Character: {character}</p>
               </li>
             ))}
           </ul>
+        )}
+        {status === "resolved" && cast.length === 0 && (
+          <p>There is no cast for this movie</p>
         )}
       </Route>
     </>
@@ -43,12 +61,3 @@ const Cast = ({ movieId }) => {
 };
 
 export default Cast;
-
-// {/* <ul>
-//         {actors.map(actor => (<li key={actor.id}>
-//             <img src={`https://image.tmdb.org/t/p/w342${actor.profile_path}`} alt='' />
-//             <p>Name: { actor.name}</p>
-//             <p>Character: { actor.character}</p>
-
-//         </li>))}
-//     </ul> */}

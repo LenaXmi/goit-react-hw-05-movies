@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useRouteMatch, useHistory, useLocation } from "react-router-dom";
+import Loader from "react-loader-spinner";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as API from "../../services/movies-api";
 import s from "./MoviesPage.module.css";
 
@@ -11,15 +14,27 @@ const MoviesPage = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchingMovies, setSearchingMovies] = useState([]);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (queryParams === null) {
       return;
     }
+    setStatus("pending");
 
     API.fetchMoviesByKeyword(queryParams)
-      .then((response) => setSearchingMovies(response.results))
-      .catch((error) => console.log(error));
+      .then((response) => {
+        if (response.results.length !== 0) {
+          setSearchingMovies(response.results);
+          setStatus("resolved");
+        } else {
+          toast.error("No movies found");
+          setStatus("idle");
+          console.log("not found");
+        }
+      })
+      .catch((error) => setError(error), setStatus("rejected"));
   }, [queryParams]);
 
   const handleChange = (e) => {
@@ -30,6 +45,7 @@ const MoviesPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim() === "") {
+      toast.info("The input field cannot be empty");
       return;
     }
     setSearchQuery(searchQuery);
@@ -40,6 +56,7 @@ const MoviesPage = () => {
 
   return (
     <>
+      <ToastContainer />
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -51,7 +68,16 @@ const MoviesPage = () => {
         />
         <button type="submit">Search</button>
       </form>
-      {searchingMovies && (
+      {status === "pending" && (
+        <Loader
+          type="Circles"
+          color="#2196f3"
+          height={70}
+          width={70}
+          timeout={2000}
+        />
+      )}
+      {status === "resolved" && (
         <ul className={s.moviesList}>
           {searchingMovies.map(({ id, original_title }) => (
             <li key={id} className={s.listItem}>
