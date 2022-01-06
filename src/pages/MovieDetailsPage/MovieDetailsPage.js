@@ -25,8 +25,7 @@ const MovieDetailsPage = () => {
     overview,
     genres,
   } = movieData;
-  console.log(url);
-  console.log(path);
+
   useEffect(() => {
     if (movieId === "") {
       return;

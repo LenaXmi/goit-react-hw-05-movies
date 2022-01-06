@@ -31,7 +31,6 @@ const MoviesPage = () => {
         } else {
           toast.error("No movies found");
           setStatus("idle");
-          console.log("not found");
         }
       })
       .catch((error) => setError(error), setStatus("rejected"));
