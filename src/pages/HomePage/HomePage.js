@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import * as API from "../../services/movies-api";
 import s from "./Homepage.module.css";
@@ -8,6 +8,7 @@ const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     setStatus("pending");
@@ -38,7 +39,14 @@ const HomePage = () => {
         <ul className={s.moviesList}>
           {movies.map(({ id, title, name }) => (
             <li key={id} className={s.listItem}>
-              <Link to={`/movies/${id}`}>{title || name}</Link>
+              <Link
+                to={{
+                  pathname: `/movies/${id}`,
+                  state: { from: { location, label: "Go back to homepage" } },
+                }}
+              >
+                {title ?? name}
+              </Link>
             </li>
           ))}
         </ul>

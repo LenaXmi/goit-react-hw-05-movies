@@ -6,7 +6,6 @@
 
 .movieContainer {
   display: flex;
-  padding: 12px;
 }
 
 .genresList {
@@ -20,4 +19,12 @@
 
 .castLink {
   margin-right: 15px;
+}
+
+.goBackBtn {
+  margin-bottom: 10px;
+  background-color: #2196f3;
+  color: white;
+  border: transparent;
+  border-radius: 4px;
 }

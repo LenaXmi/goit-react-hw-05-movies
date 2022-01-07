@@ -16,7 +16,7 @@ const MoviesPage = () => {
   const [searchingMovies, setSearchingMovies] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
-
+  console.log(location);
   useEffect(() => {
     if (queryParams === null) {
       return;
@@ -80,7 +80,16 @@ const MoviesPage = () => {
         <ul className={s.moviesList}>
           {searchingMovies.map(({ id, original_title }) => (
             <li key={id} className={s.listItem}>
-              <Link to={`${url}/${id}`}>{original_title}</Link>
+              <Link
+                to={{
+                  pathname: `${url}/${id}`,
+                  state: {
+                    from: { location, label: "Go back to search page" },
+                  },
+                }}
+              >
+                {original_title}
+              </Link>
             </li>
           ))}
         </ul>

@@ -1,5 +1,12 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { useParams, useRouteMatch, Route, Link } from "react-router-dom";
+import {
+  useParams,
+  useRouteMatch,
+  useHistory,
+  useLocation,
+  Route,
+  Link,
+} from "react-router-dom";
 import Loader from "react-loader-spinner";
 import * as API from "../../services/movies-api";
 import s from "./MovieDetailsPage.module.css";
@@ -12,10 +19,12 @@ const Reviews = lazy(() =>
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const { url, path } = useRouteMatch();
+  const history = useHistory();
+  const location = useLocation();
   const [movieData, setMovieData] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
-
+  console.log(location);
   const {
     poster_path,
     backdrop_path,
@@ -39,6 +48,10 @@ const MovieDetailsPage = () => {
       });
   }, [movieId]);
 
+  const onGoBack = () => {
+    history.push(location.state.from);
+  };
+
   return (
     <>
       {status === "pending" && (
@@ -52,11 +65,20 @@ const MovieDetailsPage = () => {
       )}
       {status === "resolved" && (
         <>
+          <button
+            type="button"
+            onClick={() => {
+              history.push(location?.state?.from.location ?? "/");
+            }}
+            className={s.goBackBtn}
+          >
+            {location?.state?.from?.label}
+          </button>
           <div className={s.movieContainer}>
             <img
               className={s.poster}
               src={`https://image.tmdb.org/t/p/w342${
-                poster_path || backdrop_path
+                poster_path ?? backdrop_path
               }`}
               alt="poster"
             />
