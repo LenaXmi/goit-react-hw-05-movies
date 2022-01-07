@@ -1,4 +1,4 @@
-import { useRouteMatch, Route } from "react-router-dom";
+import { useRouteMatch, useLocation, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Loader from "react-loader-spinner";
 import * as API from "../../services/movies-api";
@@ -7,6 +7,7 @@ import icon from "../../icons/icon.png";
 
 const Cast = ({ movieId }) => {
   const { path } = useRouteMatch();
+  const location = useLocation();
 
   const [cast, setCast] = useState([]);
   const [status, setStatus] = useState("idle");

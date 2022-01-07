@@ -11,12 +11,12 @@ const MoviesPage = () => {
   const location = useLocation();
   const { url } = useRouteMatch();
   const queryParams = new URLSearchParams(location.search).get("query");
-
+  console.log(location);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchingMovies, setSearchingMovies] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
-  console.log(location);
+
   useEffect(() => {
     if (queryParams === null) {
       return;

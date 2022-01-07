@@ -24,7 +24,7 @@ const MovieDetailsPage = () => {
   const [movieData, setMovieData] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
-  console.log(location);
+
   const {
     poster_path,
     backdrop_path,
@@ -48,10 +48,6 @@ const MovieDetailsPage = () => {
       });
   }, [movieId]);
 
-  const onGoBack = () => {
-    history.push(location.state.from);
-  };
-
   return (
     <>
       {status === "pending" && (
@@ -68,11 +64,11 @@ const MovieDetailsPage = () => {
           <button
             type="button"
             onClick={() => {
-              history.push(location?.state?.from.location ?? "/");
+              history.push(location?.state?.from?.location ?? "/");
             }}
             className={s.goBackBtn}
           >
-            {location?.state?.from?.label}
+            {location?.state?.from?.label ?? "Go back"}
           </button>
           <div className={s.movieContainer}>
             <img
@@ -107,10 +103,22 @@ const MovieDetailsPage = () => {
           </div>
           <hr />
           <p>Additional information</p>
-          <Link to={`${url}/cast`} className={s.castLink}>
+          <Link
+            to={{
+              pathname: `${url}/cast`,
+              state: { from: location?.state?.from ?? "/" },
+            }}
+            className={s.castLink}
+          >
             Cast
           </Link>
-          <Link to={`${url}/reviews`} className={s.reviewsLink}>
+          <Link
+            to={{
+              pathname: `${url}/reviews`,
+              state: { from: location?.state?.from ?? "/" },
+            }}
+            className={s.reviewsLink}
+          >
             Reviews
           </Link>
           <hr />
