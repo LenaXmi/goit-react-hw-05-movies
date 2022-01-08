@@ -27,3 +27,7 @@ ul {
   padding-left: 0;
   list-style: none;
 }
+
+.active {
+  color: #2196f3;
+}

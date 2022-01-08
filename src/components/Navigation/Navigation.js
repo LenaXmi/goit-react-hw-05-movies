@@ -4,10 +4,10 @@ const Navigation = () => {
   return (
     <>
       <nav>
-        <NavLink exact to="/" className={s.link} activeClassName={s.activeLink}>
+        <NavLink to="/" className={s.link}>
           Home
         </NavLink>
-        <NavLink to="/movies" className={s.link} activeClassName={s.activeLink}>
+        <NavLink to="/movies" className={s.link}>
           Movies
         </NavLink>
       </nav>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useMatch } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import slugify from "slugify";
 import * as API from "../../services/movies-api";

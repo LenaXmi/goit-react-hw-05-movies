@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import Container from "./components/Container";
 import Navigation from "./components/Navigation";
@@ -30,21 +30,13 @@ function App() {
           />
         }
       >
-        <Switch>
-          <Route exact path="/">
-            <HomePage />
-          </Route>
-          <Route exact path="/movies">
-            <MoviesPage />
-          </Route>
-          <Route path="/movies/:slug">
-            <MovieDetailsPage />
-          </Route>
+        <Routes>
+          <Route path="/" element={<HomePage />}></Route>
+          <Route path="/movies" element={<MoviesPage />}></Route>
+          <Route path="/movies/:slug/*" element={<MovieDetailsPage />}></Route>
 
-          <Route>
-            <NotFound />
-          </Route>
-        </Switch>
+          <Route path="*" element={<NotFound />}></Route>
+        </Routes>
       </Suspense>
     </Container>
   );

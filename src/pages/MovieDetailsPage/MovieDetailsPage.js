@@ -1,9 +1,10 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import {
   useParams,
-  useRouteMatch,
-  useHistory,
+  useMatch,
+  useNavigate,
   useLocation,
+  Routes,
   Route,
   Link,
 } from "react-router-dom";
@@ -18,8 +19,9 @@ const Reviews = lazy(() =>
 
 const MovieDetailsPage = () => {
   const { slug } = useParams();
-  const { url, path } = useRouteMatch();
-  const history = useHistory();
+  // const { url, path } = useMatch();
+  // console.log(useMatch())
+  const history = useNavigate();
   const location = useLocation();
   const [movieData, setMovieData] = useState([]);
   const [status, setStatus] = useState("idle");
@@ -65,7 +67,7 @@ const MovieDetailsPage = () => {
           <button
             type="button"
             onClick={() => {
-              history.push(location?.state?.from?.location ?? "/");
+              history(location?.state?.from?.location ?? "/");
             }}
             className={s.goBackBtn}
           >
@@ -106,7 +108,7 @@ const MovieDetailsPage = () => {
           <p>Additional information</p>
           <Link
             to={{
-              pathname: `${url}/cast`,
+              pathname: `./cast`,
               state: { from: location?.state?.from ?? "/" },
             }}
             className={s.castLink}
@@ -115,7 +117,7 @@ const MovieDetailsPage = () => {
           </Link>
           <Link
             to={{
-              pathname: `${url}/reviews`,
+              pathname: `./reviews`,
               state: { from: location?.state?.from ?? "/" },
             }}
             className={s.reviewsLink}
@@ -135,10 +137,13 @@ const MovieDetailsPage = () => {
               />
             }
           >
-            <Route path={path}>
-              <Cast movieId={movieId} />
-              <Reviews movieId={movieId} />
-            </Route>
+            <Routes>
+              <Route path="cast/*" element={<Cast movieId={movieId} />}></Route>
+              <Route
+                path="reviews/*"
+                element={<Reviews movieId={movieId} />}
+              ></Route>
+            </Routes>
           </Suspense>
         </>
       )}

@@ -1,4 +1,4 @@
-import { useRouteMatch, useLocation, Route } from "react-router-dom";
+import { useMatch, useLocation, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Loader from "react-loader-spinner";
 import * as API from "../../services/movies-api";
@@ -6,7 +6,7 @@ import s from "./Cast.module.css";
 import icon from "../../icons/icon.png";
 
 const Cast = ({ movieId }) => {
-  const { path } = useRouteMatch();
+  // const { path } = useMatch();
   const location = useLocation();
 
   const [cast, setCast] = useState([]);
@@ -24,39 +24,37 @@ const Cast = ({ movieId }) => {
 
   return (
     <>
-      <Route path={`${path}/cast`}>
-        {status === "pending" && (
-          <Loader
-            type="Circles"
-            color="#2196f3"
-            height={70}
-            width={70}
-            timeout={2000}
-          />
-        )}
-        {status === "resolved" && cast && (
-          <ul>
-            {cast.map(({ id, profile_path, name, character }) => (
-              <li key={id}>
-                <img
-                  className={s.actorPhoto}
-                  src={
-                    profile_path
-                      ? `https://image.tmdb.org/t/p/w342${profile_path}`
-                      : icon
-                  }
-                  alt="actor"
-                />
-                <p> {name}</p>
-                <p>Character: {character}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-        {status === "resolved" && cast.length === 0 && (
-          <p>There is no cast for this movie</p>
-        )}
-      </Route>
+      {status === "pending" && (
+        <Loader
+          type="Circles"
+          color="#2196f3"
+          height={70}
+          width={70}
+          timeout={2000}
+        />
+      )}
+      {status === "resolved" && cast && (
+        <ul>
+          {cast.map(({ id, profile_path, name, character }) => (
+            <li key={id}>
+              <img
+                className={s.actorPhoto}
+                src={
+                  profile_path
+                    ? `https://image.tmdb.org/t/p/w342${profile_path}`
+                    : icon
+                }
+                alt="actor"
+              />
+              <p> {name}</p>
+              <p>Character: {character}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+      {status === "resolved" && cast.length === 0 && (
+        <p>There is no cast for this movie</p>
+      )}
     </>
   );
 };
