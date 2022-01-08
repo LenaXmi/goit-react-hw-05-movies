@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import { Link, useRouteMatch, useHistory, useLocation } from "react-router-dom";
 import Loader from "react-loader-spinner";
+import slugify from "slugify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as API from "../../services/movies-api";
 import s from "./MoviesPage.module.css";
-
+const slug = (string) => slugify(string, { replacement: "_", lower: true });
 const MoviesPage = () => {
   const history = useHistory();
   const location = useLocation();
   const { url } = useRouteMatch();
   const queryParams = new URLSearchParams(location.search).get("query");
-  console.log(location);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [searchingMovies, setSearchingMovies] = useState([]);
   const [status, setStatus] = useState("idle");
@@ -82,7 +83,7 @@ const MoviesPage = () => {
             <li key={id} className={s.listItem}>
               <Link
                 to={{
-                  pathname: `${url}/${id}`,
+                  pathname: `${url}/${slug(`${original_title}_${id}`)}`,
                   state: {
                     from: { location, label: "Go back to search page" },
                   },

@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Loader from "react-loader-spinner";
+import slugify from "slugify";
 import * as API from "../../services/movies-api";
 import s from "./Homepage.module.css";
+
+const slug = (string) => slugify(string, { replacement: "_", lower: true });
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
@@ -41,7 +44,7 @@ const HomePage = () => {
             <li key={id} className={s.listItem}>
               <Link
                 to={{
-                  pathname: `/movies/${id}`,
+                  pathname: `/movies/${slug(`${title}_${id}`)}`,
                   state: { from: { location, label: "Go back to homepage" } },
                 }}
               >

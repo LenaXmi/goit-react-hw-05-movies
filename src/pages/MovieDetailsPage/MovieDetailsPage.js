@@ -17,13 +17,14 @@ const Reviews = lazy(() =>
 );
 
 const MovieDetailsPage = () => {
-  const { movieId } = useParams();
+  const { slug } = useParams();
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const location = useLocation();
   const [movieData, setMovieData] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
+  const movieId = slug.match(/[a-z0-9]+$/)[0];
 
   const {
     poster_path,
