@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useMatch, Routes, Route } from "react-router-dom";
+
 import * as API from "../../services/movies-api";
 
 const Reviews = ({ movieId }) => {
@@ -28,6 +28,7 @@ const Reviews = ({ movieId }) => {
       {status === "resolved" && reviews.length === 0 && (
         <p>There is no reviews for this movie</p>
       )}
+      {status === "rejected" && <h1>{error && error.message} </h1>}
     </>
   );
 };

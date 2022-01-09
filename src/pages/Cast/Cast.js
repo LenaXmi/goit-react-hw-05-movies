@@ -1,4 +1,3 @@
-import { useMatch, useLocation, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Loader from "react-loader-spinner";
 import * as API from "../../services/movies-api";
@@ -6,9 +5,6 @@ import s from "./Cast.module.css";
 import icon from "../../icons/icon.png";
 
 const Cast = ({ movieId }) => {
-  // const { path } = useMatch();
-  const location = useLocation();
-
   const [cast, setCast] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
@@ -55,6 +51,7 @@ const Cast = ({ movieId }) => {
       {status === "resolved" && cast.length === 0 && (
         <p>There is no cast for this movie</p>
       )}
+      {status === "rejected" && <h1>{error && error.message} </h1>}
     </>
   );
 };

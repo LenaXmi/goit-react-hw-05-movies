@@ -1,7 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import {
   useParams,
-  useMatch,
   useNavigate,
   useLocation,
   Routes,
@@ -19,10 +18,10 @@ const Reviews = lazy(() =>
 
 const MovieDetailsPage = () => {
   const { slug } = useParams();
-  // const { url, path } = useMatch();
-  // console.log(useMatch())
-  const history = useNavigate();
+
+  const navigate = useNavigate();
   const location = useLocation();
+
   const [movieData, setMovieData] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
@@ -30,7 +29,7 @@ const MovieDetailsPage = () => {
 
   const {
     poster_path,
-    backdrop_path,
+
     title,
     release_date,
     vote_average,
@@ -67,7 +66,7 @@ const MovieDetailsPage = () => {
           <button
             type="button"
             onClick={() => {
-              history(location?.state?.from?.location ?? "/");
+              navigate(location?.state?.from?.location ?? "/");
             }}
             className={s.goBackBtn}
           >
@@ -76,9 +75,9 @@ const MovieDetailsPage = () => {
           <div className={s.movieContainer}>
             <img
               className={s.poster}
-              src={`https://image.tmdb.org/t/p/w342${
-                poster_path ?? backdrop_path
-              }`}
+              src={
+                poster_path && `https://image.tmdb.org/t/p/w342${poster_path}`
+              }
               alt="poster"
             />
 
@@ -107,19 +106,15 @@ const MovieDetailsPage = () => {
           <hr />
           <p>Additional information</p>
           <Link
-            to={{
-              pathname: `./cast`,
-              state: { from: location?.state?.from ?? "/" },
-            }}
+            to={`./cast`}
+            state={{ from: location?.state?.from ?? "/" }}
             className={s.castLink}
           >
             Cast
           </Link>
           <Link
-            to={{
-              pathname: `./reviews`,
-              state: { from: location?.state?.from ?? "/" },
-            }}
+            to={`./reviews`}
+            state={{ from: location?.state?.from ?? "/" }}
             className={s.reviewsLink}
           >
             Reviews

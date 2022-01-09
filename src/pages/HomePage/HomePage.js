@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useMatch } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import slugify from "slugify";
 import * as API from "../../services/movies-api";
@@ -43,10 +43,8 @@ const HomePage = () => {
           {movies.map(({ id, title, name }) => (
             <li key={id} className={s.listItem}>
               <Link
-                to={{
-                  pathname: `/movies/${slug(`${title}_${id}`)}`,
-                  state: { from: { location, label: "Go back to homepage" } },
-                }}
+                to={`/movies/${slug(`${title} ${id}`)}`}
+                state={{ from: { location, label: "Go back to home page" } }}
               >
                 {title ?? name}
               </Link>
